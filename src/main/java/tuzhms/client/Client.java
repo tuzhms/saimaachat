@@ -25,6 +25,10 @@ public class Client implements Title{
 		connectIp = ip;
 	}
 
+	public String getConnectIp() {
+		return connectIp;
+	}
+
 	public Client() {
 		try {
 			//Получение локального ip адреса

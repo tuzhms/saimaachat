@@ -7,10 +7,18 @@ import javax.swing.JButton;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import tuzhms.client.Client;
 
 public class ConnectFrame extends JFrame{
+
+	private JTextField name = new JTextField(10);
+	private JTextField connectIp = new JTextField("xxx.xxx.xxx.xxx");
+	//JButton okButton = new JButton("Поехали");
+
+
 	public ConnectFrame(Client you) {
 		super("Подключение");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -18,9 +26,9 @@ public class ConnectFrame extends JFrame{
 		//Элементы окна
 		JLabel yourIp = new JLabel("Ваш IP: " + you.getIp());
 		JLabel nameLabel = new JLabel("Ваше имя: ");
-		JTextField name = new JTextField(10);
+		name = new JTextField(10);
 		JLabel connectIpLabel = new JLabel("Подключиться к IP: ");
-		JTextField connectIp = new JTextField("xxx.xxx.xxx.xxx");
+		connectIp = new JTextField("xxx.xxx.xxx.xxx");
 		JButton okButton = new JButton("Поехали");
 
 		//Объявнение GroupLayout
@@ -51,9 +59,28 @@ public class ConnectFrame extends JFrame{
 				.addComponent(connectIp))
 			.addComponent(okButton));
 
+		//Слушатель кнопки
+		ActionListener okButtonAction = new OkButtonAction(you);
+		okButton.addActionListener(okButtonAction);
 
 		pack();
 		setVisible(true);
 
+	}
+
+	class OkButtonAction implements ActionListener {
+
+		private Client you;
+
+		public OkButtonAction (Client you) {
+			this.you = you;
+		}
+		public void actionPerformed(ActionEvent e) {
+			you.setName(name.getText());
+			you.setConnectIp(connectIp.getText());
+			System.out.println(you.getName() + " " + you.getConnectIp());
+			new MainFrame(you);
+			ConnectFrame.this.dispose();
+		}
 	}
 }
