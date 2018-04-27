@@ -1,5 +1,5 @@
 package tuzhms.gui;
-//Написать документацию
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -17,13 +17,31 @@ import java.lang.Exception;
 
 import tuzhms.client.Client;
 
+/**
+* Этот класс описывает окно подключения безсерверного чата.
+* В нем указан ваш ip-адрес, а так же поля для ввода имени
+* и ip-адреса устройства, к которому необходимо подключиться.
+* @autor Tuzhilkin Mikhail
+* @version 1.0.1
+*/
 public class ConnectFrame extends JFrame{
 
-	//Эти 2 параметра вытащены наружу, чтоб были доступны 
-	//в классе обработчика событий
-	private JTextField name = new JTextField(10);
-	private JTextField connectIp = new JTextField("xxx.xxx.xxx.xxx");
+	/**
+	* Поле ввода имени. 
+	* Выведено в поля класса, чтоб было доступно для класса кнопки.
+	*/
+	private JTextField name;
+	/**
+	* Поле ввода ip-адреса, к которому необходимо подключиться. 
+	* Выведено в поля класса, чтоб было доступно для класса кнопки.
+	*/
+	private JTextField connectIp;
 
+	/**
+	* Конструктор окна подключения.
+	* @param you объект {@link Client}, в котором хранятся данные о контакте
+	* @see Client
+	*/
 	public ConnectFrame(Client you) {
 		super("Подключение");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -74,7 +92,11 @@ public class ConnectFrame extends JFrame{
 
 	}
 
+	/**
+	* Действие кнопки "Ок".
+	*/
 	class OkButtonAction implements ActionListener {
+
 
 		private Client you;
 
@@ -83,10 +105,10 @@ public class ConnectFrame extends JFrame{
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			if (correctName()) return;
-			if (correctConnectIp()) return;
+			if (!correctName()) return;
+			if (!correctConnectIp()) return;
 			//System.out.println(you.getName() + " " + you.getConnectIp());
-			new MainFrame(you);
+			new MainFrame();
 			ConnectFrame.this.dispose();
 		}
 
@@ -94,10 +116,10 @@ public class ConnectFrame extends JFrame{
 		private boolean correctName() {
 			if (name.getText().equals("")) {
 				errorDialog("Введите имя");
-				return true;
+				return false;
 			} else {
 				you.setName(name.getText());
-				return false;
+				return true;
 			}
 		}
 
@@ -115,34 +137,34 @@ public class ConnectFrame extends JFrame{
 				if (j != 4) throw new Exception();
 			} catch (Exception e) {
 				errorDialog("Введите корректный ip");
-				return true;
+				return false;
 			}
 			you.setConnectIp(connectIp.getText());
-			return false;
+			return true;
 		}
 
 		//Создание окна ошибки при некорректном событии
 		private void errorDialog(String text) {
-			final JDialog dialog = new JDialog(ConnectFrame.this, "Ошибка", true);
-				dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			final JDialog dialog = new JDialog(
+				ConnectFrame.this, "Ошибка", true);
+			dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-				JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER));
-				flow.add(new JLabel(text));
-				JButton button = new JButton("Ок!");
-				button.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						dialog.dispose();
-					}
-				});
-				flow.add(button);
-				dialog.getContentPane().add(flow);
+			JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER));
+			flow.add(new JLabel(text));
+			JButton button = new JButton("Ок");
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dialog.dispose();
+				}
+			});
+			flow.add(button);
+			dialog.getContentPane().add(flow);
 
-				dialog.setSize(155, 80);
-				dialog.setLocationRelativeTo(null);
-				dialog.setVisible(true);
+			dialog.setSize(155, 80);
+			dialog.setLocationRelativeTo(null);
+			dialog.setVisible(true);
 		}
 
 	}
-
 
 }
