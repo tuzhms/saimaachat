@@ -1,3 +1,13 @@
+/***************************************************\
+|     _____         _   __      __                  |
+|    / ___/   /\   | | |  \    /  |   /\     /\     |
+|   | |___   /  \  | | |   \  /   |  /  \   /  \    |
+|    \__  \  /  \  | | | |\ \/ /| |  /  \   /  \    |
+|    ___| | /_  _\ | | | | \  / | | /_  _\ /_  _\   |
+|   /_____/   ||   |_| |_|  \/  |_|   ||     ||     |
+|                                                   |
+\***************************************************/
+
 package tuzhms;
 
 import tuzhms.gui.MainFrame;
@@ -10,9 +20,9 @@ public class Run {
 
 	public static void main(String[] args) {
 		Client you = new Client();
-		ConnectFrame c = new ConnectFrame(you);
+		//ConnectFrame c = new ConnectFrame(you);
 
-		//MainFrame frame = new MainFrame();
+		MainFrame frame = new MainFrame();
 	}
 
 }
