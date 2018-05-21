@@ -1,6 +1,6 @@
 package tuzhms.client;
 
-import java.io.DataOutputStream;
+import java.io.PrintWriter;
 import java.io.IOException;
 
 import tuzhms.gui.MainFrame;
@@ -14,21 +14,22 @@ import tuzhms.gui.MainFrame;
 class WriteMessageThread implements Runnable {
 
 	private MainFrame frame;
-	private DataOutputStream out;
+	private PrintWriter out;
 	private boolean stoped = false;
 
-	WriteMessageThread(MainFrame frame, DataOutputStream out) {
+	WriteMessageThread(MainFrame frame, PrintWriter out) {
 		this.frame = frame;
 		this.out = out;
 	}
 
 	//@Ovirride
 	public void run() {
+		out.println("Собеседник готов!");
 		while (!stoped) {
-			try {
-				String message = frame.getYourMessage();
-				out.writeUTF(message);
-			} catch (IOException e) {}
+			String message = frame.getYourMessage();
+			out.println(message);
+			frame.addMessage(message + "\n");
+			System.out.println("---> Отправил");
 		}
 	}
 }

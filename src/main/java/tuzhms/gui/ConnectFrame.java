@@ -16,13 +16,14 @@ import java.awt.FlowLayout;
 import java.lang.Exception;
 
 import tuzhms.client.Client;
+import tuzhms.client.Sender;
 
 /**
 * Этот класс описывает окно подключения безсерверного чата.
 * В нем указан ваш ip-адрес, а так же поля для ввода имени
 * и ip-адреса устройства, к которому необходимо подключиться.
 * @autor Tuzhilkin Mikhail
-* @version 1.0.1
+* @version 1.0.0
 */
 public class ConnectFrame extends JFrame{
 
@@ -108,14 +109,14 @@ public class ConnectFrame extends JFrame{
 			if (!correctName()) return;
 			if (!correctConnectIp()) return;
 			//System.out.println(you.getName() + " " + you.getConnectIp());
-			new MainFrame();
+			new Sender(you);
 			ConnectFrame.this.dispose();
 		}
 
 		//Проверка введёного имени на корректность
 		private boolean correctName() {
 			if (name.getText().equals("")) {
-				errorDialog("Введите имя");
+				new ErrorDialog(ConnectFrame.this, "Введите имя");
 				return false;
 			} else {
 				you.setName(name.getText());
@@ -136,34 +137,14 @@ public class ConnectFrame extends JFrame{
 				} 
 				if (j != 4) throw new Exception();
 			} catch (Exception e) {
-				errorDialog("Введите корректный ip");
+				new ErrorDialog(ConnectFrame.this, "Введите корректный ip");
 				return false;
 			}
 			you.setConnectIp(connectIp.getText());
 			return true;
 		}
 
-		//Создание окна ошибки при некорректном событии
-		private void errorDialog(String text) {
-			final JDialog dialog = new JDialog(
-				ConnectFrame.this, "Ошибка", true);
-			dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-			JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			flow.add(new JLabel(text));
-			JButton button = new JButton("Ок");
-			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					dialog.dispose();
-				}
-			});
-			flow.add(button);
-			dialog.getContentPane().add(flow);
-
-			dialog.setSize(155, 80);
-			dialog.setLocationRelativeTo(null);
-			dialog.setVisible(true);
-		}
+		
 
 	}
 

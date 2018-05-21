@@ -24,12 +24,16 @@ class ReadMessageThread implements Runnable {
 
 	//@Override
 	public void run() {
-		System.out.println("---> Поток чтения работает");
+		
 		while (!stoped) {
 			try {
-				String message = in.readLine();
+				System.out.println("---> Поток чтения работает");
+				String message = in.readLine() + "\n";
+				System.out.println("Прочёл");
 				frame.addMessage(message);
-			} catch (IOException e) {}
+			} catch (IOException e) {
+				System.out.println("---> Error ReadThread");
+			}
 		}
 	}
 }
