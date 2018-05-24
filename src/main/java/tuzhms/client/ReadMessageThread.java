@@ -6,23 +6,32 @@ import java.io.IOException;
 import tuzhms.gui.MainFrame;
 
 /**
-* Поток вывода сообщений от собеседника
+* Поток чтения сообщений от собеседника
 * Объявлять как демона
-* @autor Tuzhilkin Mikhail
-* @version 1.0.0
+*
+* @author Tuzhilkin Mikhail
+* @since 1.0.0
 */
-class ReadMessageThread implements Runnable {
+public class ReadMessageThread implements Runnable {
 
 	private MainFrame frame;
 	private BufferedReader in;
 	private boolean stoped = false;
 
+	/**
+	* Создание эклемпляра потока чтения сообщений
+	*
+	* @param frame главное окно
+	* @param in {@link BufferedReader}
+	* @see MainFrame
+	* @see BufferedReader
+	*/
 	ReadMessageThread(MainFrame frame, BufferedReader in){
 		this.frame = frame;
 		this.in = in;
 	}
 
-	//@Override
+	/** Запуск потока чтения сообщений */
 	public void run() {
 		
 		while (!stoped) {

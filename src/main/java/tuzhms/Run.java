@@ -10,19 +10,42 @@
 
 package tuzhms;
 
-import tuzhms.gui.MainFrame;
 import tuzhms.gui.ConnectFrame;
 
 import tuzhms.client.Client;
 
-
+/**
+* <p>Стартовый класс прогаммы.</p>
+* <p><b>SaimaaChat</b> - это пиринговый (пока) текстовай чат.
+	В дальнейшем планируется развить данную программу до видео 
+	чата: новый Скайп.</p>
+* <p>Этот чат предназначается для личного пользования, и не 
+	предполагается распостранять его. Делается это по причине 
+	того, что в дальнейшем предпологается сделать гибридную 
+	версию с использованием сервера. Сервер будет предназначаться
+	только для сбора и передаче другим пользователям данных о 
+	пользователях находящихся в сети. Соединение так же будет 
+	проходить напрямую от клиента до клиента. Но ip-адрес 
+	не нужно будет вводить вручную, его предоставит сервер.</p>
+*
+* @author Tuzhilkin Mikhail
+* @version 1.0.0
+* @since 1.0.0
+*/
 public class Run {
 
+	/**
+	* Запуск приложения. Происходит создание клиента {@link tuzhms.client.Client}
+	* и окна подключения {@link tuzhms.gui.ConnectFrame}.
+	*
+	* @since 1.0.0
+	* @see tuzhms.client.Client
+	* @see tuzhms.gui.ConnectFrame
+	* @param args не используется
+	*/
 	public static void main(String[] args) {
 		Client you = new Client();
 		ConnectFrame c = new ConnectFrame(you);
-
-		//MainFrame frame = new MainFrame();
 	}
 
 }

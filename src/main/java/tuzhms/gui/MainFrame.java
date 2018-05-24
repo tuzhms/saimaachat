@@ -16,21 +16,32 @@ import tuzhms.client.Client;
 
 /**
 * Основное окно текстового чата
-* @autor Tuzhilkin Michael
+* В дальнейшем сделать интерфейс с методами из этого класса,
+* чтоб можно было развивать интерфейс окна.
+*
+* @author Tuzhilkin Michael
 * @version 1.0.0
+* @since 1.0.0
+* @see JFrame
+* @see Title
 */
 public class MainFrame extends JFrame implements Title{
 	
-	//Поле для ввода сообщений
+	/** Поле для ввода сообщений */
 	private JTextField writeMessageField;
 
-	//Область для вывода всех сообщений
+	/** Область для вывода всех сообщений */
 	private JTextArea readMessageField;
-
+	
+	/** Текущий клиент */
 	private Client you;
 
 	/**
 	* Конструктор основного окна текстого чата
+	*
+	* @param you объект {@link Client}, в котором хранятся данные о контакте
+	* @see Client
+	* @since 1.0.0
 	*/
 	public MainFrame(Client you) {
 		super(Title.CHAT_NAME);
@@ -62,12 +73,18 @@ public class MainFrame extends JFrame implements Title{
 
 	}
 
+	/**
+	* Отправка сообщения при нажатии клавиши Enter
+	*
+	* @since 1.0.0
+	* @see KeyListener
+	* @see MainFrame#wakeThread()
+	*/
 	class enterPressed implements KeyListener {
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == e.VK_ENTER) {
-				//System.out.println("---> notify up");
+				//Пробуждение потока отправки сообщения
 				wakeThread();
-				//System.out.println("---> notify down");
 			}
 		}
 		public void keyReleased(KeyEvent e) {}
@@ -76,21 +93,35 @@ public class MainFrame extends JFrame implements Title{
 	}
 
 	/**
-	* Добавление текста в область вывода
+	* Добавление текста в область вывода сообщений
+	* <b>В дальнейшем добавить в интерфейс</b>
+	*
 	* @param message текст, который нужно добавить в область вывода
+	* @since 1.0.0
 	*/
 	public synchronized void addMessage(String message) {
-		//readMessageField.setText(readMessageField.getText() 
-		//	+ "\n" + message);
 		readMessageField.append(message);
 	}
 
-	/** Строка с введённым сообщением */
+	/**
+	* <p>Получение текста введённого в строке отправки сообщений</p>
+	* <p><b>В дальнейшем добавить в интерфейс</b></p>
+	* <p>Данный метод должен запускаться из потока отправки сообщений 
+		{@link tuzhms.client.WriteMessageThread}.
+		Поток отправки ожидает пока пользователь нажмёт Enter, после 
+		чего введённое сообщение отправиться, а поле ввода сообщений 
+		отчистится. Для пробуждения потока отправки сообщений нужно
+		в действие на нажатие кнопки выполнить метод 
+		{@link MainFrame#wakeThread()}</p>
+	*
+	* @return Сообщение из строки отправки сообщений
+	* @since 1.0.0
+	* @see MainFrame#wakeThread()
+	* @see tuzhms.client.WriteMessageThread
+	*/
 	public synchronized String getYourMessage() {
 		try {
-			//System.out.println("---> Поток вывода ждёт");
 			wait();
-			//System.out.println("---> Поток вывода работает");
 		} catch (InterruptedException e) {
 			System.out.println("---> Error wait");
 		}
@@ -100,8 +131,14 @@ public class MainFrame extends JFrame implements Title{
 		return yourMessage;
 	}
 
-	//notyify для нажатия на enter
-	//разбудить поток
+	/**
+	* <p>Данный метод пробуждает поток отправки сообщений, остановленный
+		в методе {@link MainFrame#getYourMessage()}</p>
+	* <p><b>В дальнейшем добавить в интерфейс</b></p>
+	*
+	* @since 1.0.0
+	* @see MainFrame#getYourMessage()
+	*/
 	public synchronized void wakeThread() {
 		notify();
 	}

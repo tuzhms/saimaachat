@@ -8,21 +8,30 @@ import tuzhms.gui.MainFrame;
 /**
 * Поток ввода и отправки сообщений
 * Объявлять как демона
-* @autor Tuzhilkin Mikhail
-* @version 1.0.0
+*
+* @author Tuzhilkin Mikhail
+* @since 1.0.0
 */
-class WriteMessageThread implements Runnable {
+public class WriteMessageThread implements Runnable {
 
 	private MainFrame frame;
 	private PrintWriter out;
 	private boolean stoped = false;
 
+	/**
+	* Создание эклемпляра потока отправки сообщений
+	*
+	* @param frame главное окно
+	* @param in {@link PrintWriter}
+	* @see MainFrame
+	* @see PrintWriter
+	*/
 	WriteMessageThread(MainFrame frame, PrintWriter out) {
 		this.frame = frame;
 		this.out = out;
 	}
 
-	//@Ovirride
+	/** Запуск потока отправки сообщений */
 	public void run() {
 		out.println("Собеседник готов!");
 		while (!stoped) {

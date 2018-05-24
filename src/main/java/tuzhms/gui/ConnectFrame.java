@@ -19,11 +19,14 @@ import tuzhms.client.Client;
 import tuzhms.client.Sender;
 
 /**
-* Этот класс описывает окно подключения безсерверного чата.
+* Этот класс описывает окно подключения чата.
 * В нем указан ваш ip-адрес, а так же поля для ввода имени
 * и ip-адреса устройства, к которому необходимо подключиться.
-* @autor Tuzhilkin Mikhail
+*
+* @author Tuzhilkin Mikhail
 * @version 1.0.0
+* @since 1.0.0
+* @see JFrame
 */
 public class ConnectFrame extends JFrame{
 
@@ -32,6 +35,7 @@ public class ConnectFrame extends JFrame{
 	* Выведено в поля класса, чтоб было доступно для класса кнопки.
 	*/
 	private JTextField name;
+
 	/**
 	* Поле ввода ip-адреса, к которому необходимо подключиться. 
 	* Выведено в поля класса, чтоб было доступно для класса кнопки.
@@ -40,8 +44,10 @@ public class ConnectFrame extends JFrame{
 
 	/**
 	* Конструктор окна подключения.
+	*
 	* @param you объект {@link Client}, в котором хранятся данные о контакте
 	* @see Client
+	* @since 1.0.0
 	*/
 	public ConnectFrame(Client you) {
 		super("Подключение");
@@ -94,26 +100,57 @@ public class ConnectFrame extends JFrame{
 	}
 
 	/**
-	* Действие кнопки "Ок".
+	* Слушатель нажатия кнопки "Ок".
+	* В случае ошибок открывается {@link ErrorDialog}
+	*
+	* @since 1.0.0
+	* @see ActionListener
+	* @see ActionEvent
+	* @see JButton
+	* @see ErrorDialog
 	*/
 	class OkButtonAction implements ActionListener {
 
-
+		/** Текущий клиент */
 		private Client you;
 
+		/**
+		* Конструктор слушателя событий кнопки
+		*
+		* @param you текущий клиент
+		* @see Client
+		*/
 		public OkButtonAction (Client you) {
 			this.you = you;
 		}
 
+		/**
+		* Действие при нажатии кнопки Ок.
+		* Проверяется на корректность введённое имя и ip,
+		* закрывается окно и запускается {@link Sender}
+		*
+		* @param e событие {@link ActionEvent}
+		* @see Sender
+		* @see ActionEvent
+		* @see OkButtonAction#correctName()
+		* @see OkButtonAction#correctConnectIp()
+		*/
 		public void actionPerformed(ActionEvent e) {
 			if (!correctName()) return;
 			if (!correctConnectIp()) return;
-			//System.out.println(you.getName() + " " + you.getConnectIp());
 			new Sender(you);
 			ConnectFrame.this.dispose();
 		}
 
-		//Проверка введёного имени на корректность
+		/**
+		* Проверка введёного имени на корректность.
+		* В случае ошибок открывается {@link ErrorDialog}
+		*
+		* @return true - если имя не пустое
+		* @see Client
+		* @see Client#setName()
+		* @see ErrorDialog
+		*/
 		private boolean correctName() {
 			if (name.getText().equals("")) {
 				new ErrorDialog(ConnectFrame.this, "Введите имя");
@@ -124,7 +161,16 @@ public class ConnectFrame extends JFrame{
 			}
 		}
 
-		//Проверка на корректность введённого ip
+		/**
+		* <p>Проверка на корректность введённого ip.</p>
+		* <p>В случае ошибок открывается {@link ErrorDialog}.</p>
+		* <p><b>Переделать через регулярные выражения</b></p>
+		*
+		* @return true - если ip правильного формата
+		* @see Client
+		* @see Client#setConnectIp()
+		* @see ErrorDialog
+		*/
 		private boolean correctConnectIp() {
 			String[] ip;
 			ip = connectIp.getText().split("\\.");

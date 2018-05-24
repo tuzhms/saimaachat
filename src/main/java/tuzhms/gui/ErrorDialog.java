@@ -11,26 +11,43 @@ import java.awt.Frame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+* Модальное диалоговое окно с текстом ошибки
+*
+* @author Tuzhilkin Michael
+* @version 1.0.0
+* @since 1.0.0
+* @see JFrame
+*/
 public class ErrorDialog extends JFrame{
 	
-	//Создание окна ошибки при некорректном событии
-		public ErrorDialog(Frame frame, String text) {
-			final JDialog dialog = new JDialog(frame, "Ошибка", true);
-			dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	/**
+	* Создание окна ошибки при некорректном событии
+	*
+	* @param frame родительское окно
+	* @param text сообщение ошибки
+	* @see Frame
+	* @see JDialog
+	*/
+	public ErrorDialog(Frame frame, String text) {
+		final JDialog dialog = new JDialog(frame, "Ошибка", true);
+		dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-			JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			flow.add(new JLabel(text));
-			JButton button = new JButton("Ок");
-			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					dialog.dispose();
-				}
-			});
-			flow.add(button);
-			dialog.getContentPane().add(flow);
+		JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		flow.add(new JLabel(text));
+		JButton button = new JButton("Ок");
 
-			dialog.setSize(155, 80);
-			dialog.setLocationRelativeTo(null);
-			dialog.setVisible(true);
-		}
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
+			}
+		});
+
+		flow.add(button);
+		dialog.getContentPane().add(flow);
+
+		dialog.setSize(155, 80);
+		dialog.setLocationRelativeTo(null);
+		dialog.setVisible(true);
+	}
 }
