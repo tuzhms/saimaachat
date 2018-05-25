@@ -6,9 +6,13 @@
 
   <groupId>tuzhms</groupId>
   <artifactId>saimaachat</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <name>saimaachat</name>
+  <description>
+    Пиринговый текстовый чат. В дальнейшем планируется довести 
+    до видеочата, и сделать гибридную версию с сервером.
+  </description>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -50,6 +54,15 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix></classpathPrefix>
+                <mainClass>tuzhms.Run</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -58,6 +71,11 @@
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.8.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.0.0</version>
         </plugin>
       </plugins>
     </pluginManagement>
