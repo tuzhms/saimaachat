@@ -44,8 +44,7 @@ public class Run {
 	* @param args не используется
 	*/
 	public static void main(String[] args) {
-		Client you = new Client();
-		ConnectFrame c = new ConnectFrame(you);
+		new StartBlock();
 	}
 
 }
