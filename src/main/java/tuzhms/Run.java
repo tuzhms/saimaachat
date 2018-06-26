@@ -10,9 +10,7 @@
 
 package tuzhms;
 
-import tuzhms.gui.ConnectFrame;
-
-import tuzhms.client.Client;
+import tuzhms.blocks.StartBlock;
 
 /**
 * <p>Стартовый класс прогаммы.</p>

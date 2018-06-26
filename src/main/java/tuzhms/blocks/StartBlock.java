@@ -27,7 +27,7 @@ public class StartBlock {
 		Создание клиента, которого нужно передавать через все блоки
 		При создании клиентв ip определяются автоматически
 		*/
-		you = Client();
+		you = new Client();
 
 		//Создание и запуск серверного потока, ожидающего подключение
 		SubServerThread subServerThread = new SubServerThread();
