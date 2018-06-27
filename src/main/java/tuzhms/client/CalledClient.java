@@ -9,9 +9,8 @@ package tuzhms.client;
 */
 public class CalledClient extends User {
 
-	public CalledClient(String name, String ip){
-		setName(name);
-		setGlobalIp(ip);
-	}
+	//public CalledClient(String ip){
+	//	setGlobalIp(ip);
+	//}
 
 }

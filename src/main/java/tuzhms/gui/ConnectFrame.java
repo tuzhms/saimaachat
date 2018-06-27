@@ -15,8 +15,11 @@ import java.awt.FlowLayout;
 
 import java.lang.Exception;
 
+import java.net.UnknownHostException;
+
 import tuzhms.client.Client;
-import tuzhms.client.Sender;
+import tuzhms.client.CalledClient;
+//import tuzhms.client.Sender;
 
 /**
 * Этот класс описывает окно подключения чата.
@@ -24,12 +27,14 @@ import tuzhms.client.Sender;
 * и ip-адреса устройства, к которому необходимо подключиться.
 *
 * @author Tuzhilkin Mikhail
-* @version 1.0.0
 * @since 1.0.0
+* @version 1.1.0
 * @see JFrame
 */
-public class ConnectFrame extends JFrame{
+public class ConnectFrame extends JFrame implements Runnable {
 
+	private Client you;
+	private CalledClient yourFriend;
 	/**
 	* Поле ввода имени. 
 	* Выведено в поля класса, чтоб было доступно для класса кнопки.
@@ -48,13 +53,21 @@ public class ConnectFrame extends JFrame{
 	* @param you объект {@link Client}, в котором хранятся данные о контакте
 	* @see Client
 	* @since 1.0.0
+	* @version 1.1.0
 	*/
-	public ConnectFrame(Client you) {
+	public ConnectFrame(Client you, CalledClient yourFriend) {
 		super("Подключение");
+		this.you = you;
+		this.yourFriend = yourFriend;
+
+	}
+
+	public void run() {
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		//Элементы окна
-		JLabel yourIp = new JLabel("Ваш IP: " + you.getIp());
+		JLabel yourIp = new JLabel("Ваш IP: " + you.getLocalIp());
 		JLabel nameLabel = new JLabel("Ваше имя: ");
 		name = new JTextField(10);
 		JLabel connectIpLabel = new JLabel("Подключиться к IP: ");
@@ -90,13 +103,12 @@ public class ConnectFrame extends JFrame{
 			.addComponent(okButton));
 
 		//Слушатель кнопки
-		ActionListener okButtonAction = new OkButtonAction(you);
+		ActionListener okButtonAction = new OkButtonAction(you, yourFriend);
 		okButton.addActionListener(okButtonAction);
 
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
-
 	}
 
 	/**
@@ -113,6 +125,7 @@ public class ConnectFrame extends JFrame{
 
 		/** Текущий клиент */
 		private Client you;
+		private CalledClient yourFriend;
 
 		/**
 		* Конструктор слушателя событий кнопки
@@ -120,8 +133,9 @@ public class ConnectFrame extends JFrame{
 		* @param you текущий клиент
 		* @see Client
 		*/
-		public OkButtonAction (Client you) {
+		public OkButtonAction (Client you, CalledClient yourFriend) {
 			this.you = you;
+			this.yourFriend = yourFriend;
 		}
 
 		/**
@@ -138,7 +152,8 @@ public class ConnectFrame extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			if (!correctName()) return;
 			if (!correctConnectIp()) return;
-			new Sender(you);
+			//new Sender(you);
+			wakeThread();
 			ConnectFrame.this.dispose();
 		}
 
@@ -186,12 +201,24 @@ public class ConnectFrame extends JFrame{
 				new ErrorDialog(ConnectFrame.this, "Введите корректный ip");
 				return false;
 			}
-			you.setConnectIp(connectIp.getText());
+			try {
+				yourFriend.setGlobalIp(connectIp.getText());
+			} catch(UnknownHostException e) {}
 			return true;
 		}
 
-		
-
 	}
+
+	public synchronized void waitThread() {
+		try {
+			wait();
+		} catch (InterruptedException e) {}
+	}
+
+	public synchronized void wakeThread() {
+		notify();
+	}
+
+
 
 }
