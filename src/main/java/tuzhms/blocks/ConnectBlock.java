@@ -1,8 +1,14 @@
 package tuzhms.blocks;
 
+import java.net.Socket;
+
+import java.io.IOException;
+
 import tuzhms.client.Client;
 import tuzhms.client.CalledClient;
 import tuzhms.client.SubServerThread;
+
+import tuzhms.constants.Ports;
 
 import tuzhms.gui.ConnectFrame;
 
@@ -19,16 +25,45 @@ import tuzhms.gui.ConnectFrame;
 * @since 1.1.0
 * @version 1.1.0
 */
-public class ConnectBlock{
+public class ConnectBlock implements Ports{
 	private ConnectFrame connectFrame;
 	private CalledClient yourFriend;
+	private Socket socket;
+
+	//Тригер успешного подключения ко второму пользователю
+	private boolean socketGood = false;
 
 	public ConnectBlock(Client you, SubServerThread server) {
 		yourFriend = new CalledClient();
-		//подумать про потоки для остановки блока
 		connectFrame = new ConnectFrame(you, yourFriend);
-		connectFrame.run();
+		Thread connectThread = new Thread(connectFrame);
+		connectThread.run();
 		connectFrame.waitThread();
-		System.out.println("---> End");
+		//System.out.println("---> End");
+		//System.out.println(connectThread.isInterrupted());
+		//System.out.println(yourFriend.getGlobalIp());
+
+		//Долбёжка к подключаемому пользователю
+		while (!socketGood) {
+			try {
+				socket = new Socket(yourFriend.getGlobalIp(), Ports.PORT);
+				System.out.println("---> Socket - good!");
+				socketGood = true;
+			} catch(IOException e) {
+				System.out.println("---> Socket - error!");
+			} finally {
+				try {
+					/* Задержка нужна, чтоб опаздывающий успел подключиться
+					до инициализации потоков ввода и вывода пользователя,
+					который подключился первым. Иначе возникает ошибка */
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					System.out.println("---> Socket - nedozhdalsya!");
+				}
+			} 
+			
+		}
+
+		new IntermediateBlock(you, yourFriend, server);
 	}
 }

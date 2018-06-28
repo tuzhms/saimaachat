@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 
-import java.lang.Exception;
+//import java.lang.Exception;
 
 import java.net.UnknownHostException;
 
