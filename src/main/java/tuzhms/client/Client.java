@@ -1,7 +1,6 @@
 package tuzhms.client;
 
 import java.net.InetAddress;
-//import java.net.Inet4Address;
 import java.net.UnknownHostException;
 
 import tuzhms.constants.Title;
@@ -51,15 +50,15 @@ public class Client extends User {
 	public Client() {
 		try {
 			setLocalIp();
-			setGlobalIp(determineIp());
+		//	setGlobalIp(determineIp());
 		} catch (UnknownHostException e) {
 			System.out.println(e);
 		}
 	}
 
 	/** Определение глобатьного ip адреса */
-	public String determineIp() {
+	//public String determineIp() {
 		//Добавить код
-	}
+	//}
 
 }
