@@ -3,6 +3,8 @@ package tuzhms.blocks;
 import tuzhms.client.Client;
 import tuzhms.client.SubServerThread;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
 * <p>
@@ -19,6 +21,9 @@ import tuzhms.client.SubServerThread;
 * @version 1.1.0
 */
 public class StartBlock {
+
+	static Logger log = LoggerFactory.getLogger(StartBlock.class);
+
 	//Сам клиент
 	private Client you;
 	
@@ -30,10 +35,13 @@ public class StartBlock {
 		you = new Client();
 
 		//Создание и запуск серверного потока, ожидающего подключение
+		//Может сделать демона?
 		SubServerThread subServerThread = new SubServerThread();
 		Thread server = new Thread(subServerThread);
+		log.debug("new subServerThread");
 		server.start();
 		
+		log.info("Go to ConnectBlock");
 		new ConnectBlock(you, subServerThread);
 	}
 }

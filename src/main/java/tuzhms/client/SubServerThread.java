@@ -7,6 +7,9 @@ import java.io.IOException;
 
 import tuzhms.constants.Ports;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
 * <p>Поток серверного подключения</p>
 * <p>Поскольку чат пиринговый, необжодимо принимать подключение
@@ -21,6 +24,8 @@ import tuzhms.constants.Ports;
 * @see tuzhms.client.Sender
 */
 public class SubServerThread implements Runnable, Ports{
+
+	static Logger log = LoggerFactory.getLogger(SubServerThread.class);
 	
 	/** Сокет, в который хранятся данные о подключении*/
 	private Socket socket = null;
@@ -34,11 +39,16 @@ public class SubServerThread implements Runnable, Ports{
 	* @see Ports#PORT
 	*/
 	public void run() {
+		log.info("Start SubServerThread");
 		try {
+			//тут ограничить кол-во подключений
 			ServerSocket server = new ServerSocket(Ports.PORT);
+			log.debug("new ServerSocket");
 			socket = server.accept();
+			log.info("Connect with client good. IP: " + socket.getLocalAddress() + 
+				" Port: " + socket.getLocalPort());
 		} catch(IOException e) {
-			System.out.println("---> Ошибка в сервере");
+			log.error("ServerSocket error", e);
 		}
 	}
 

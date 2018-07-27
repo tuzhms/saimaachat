@@ -29,6 +29,23 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency><!-- Логирование -->
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+      <!--<scope>test</scope>-->
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <version>1.2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.25</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -77,6 +94,30 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+        <plugin>
+          <!-- Это чтоб собирать пакет вместе с зависимостями-->
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.1.0</version>
+          <configuration>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+            <archive>
+              <manifest>
+                <mainClass>tuzhms.Run</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
+          <executions>
+            <execution>
+              <id>make-assembly</id> 
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+         </plugin>
       </plugins>
     </pluginManagement>
   </build>

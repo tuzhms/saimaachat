@@ -12,6 +12,9 @@ package tuzhms;
 
 import tuzhms.blocks.StartBlock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
 * <p>Стартовый класс прогаммы.</p>
 * <p><b>SaimaaChat</b> - это пиринговый (пока) текстовай чат.
@@ -32,6 +35,8 @@ import tuzhms.blocks.StartBlock;
 */
 public class Run {
 
+	static Logger log = LoggerFactory.getLogger(Run.class);
+
 	/**
 	* Запуск приложения. Происходит создание клиента {@link tuzhms.client.Client}
 	* и окна подключения {@link tuzhms.gui.ConnectFrame}.
@@ -42,7 +47,10 @@ public class Run {
 	* @param args не используется
 	*/
 	public static void main(String[] args) {
+		log.info("Start SaimaaChat");
+		log.info("Go to StartBlock");
 		new StartBlock();
+
 	}
 
 }
