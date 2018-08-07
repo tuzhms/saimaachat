@@ -12,6 +12,9 @@ import tuzhms.constants.Ports;
 
 import tuzhms.gui.ConnectFrame;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
 * <p>
 	В данном блоке необходимо вывести окно подключения 
@@ -26,6 +29,9 @@ import tuzhms.gui.ConnectFrame;
 * @version 1.1.0
 */
 public class ConnectBlock implements Ports{
+
+	static Logger log = LoggerFactory.getLogger(ConnectBlock.class);
+
 	private ConnectFrame connectFrame;
 	private CalledClient yourFriend;
 	private Socket socket;
@@ -38,19 +44,19 @@ public class ConnectBlock implements Ports{
 		connectFrame = new ConnectFrame(you, yourFriend);
 		Thread connectThread = new Thread(connectFrame);
 		connectThread.run();
+		log.debug("Start wait connectThread");
 		connectFrame.waitThread();
-		//System.out.println("---> End");
-		//System.out.println(connectThread.isInterrupted());
-		//System.out.println(yourFriend.getGlobalIp());
+		log.debug("End wait connectThread");
 
 		//Долбёжка к подключаемому пользователю
+		log.info("Start dolbyezhki");
 		while (!socketGood) {
 			try {
 				socket = new Socket(yourFriend.getGlobalIp(), Ports.PORT);
-				System.out.println("---> Socket - good!");
+				log.info("Connect with server good");
 				socketGood = true;
 			} catch(IOException e) {
-				System.out.println("---> Socket - error!");
+				log.error("Connect with server error", e);
 			} finally {
 				try {
 					/* Задержка нужна, чтоб опаздывающий успел подключиться
@@ -58,12 +64,13 @@ public class ConnectBlock implements Ports{
 					который подключился первым. Иначе возникает ошибка */
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
-					System.out.println("---> Socket - nedozhdalsya!");
+					log.error("Sleep error", e);
 				}
 			} 
 			
 		}
 
-		new IntermediateBlock(you, yourFriend, server);
+		log.info("Go to IntermediateBlock");
+		new IntermediateBlock(you, yourFriend, server, socket);
 	}
 }

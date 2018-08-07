@@ -1,7 +1,6 @@
 package tuzhms.blocks;
 
 import java.net.Socket;
-//import java.net.InetAddress;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,6 +16,9 @@ import tuzhms.client.ReadNameThread;
 //import tuzhms.client.ReadMessageThread;
 //import tuzhms.client.WriteMessageThread;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
 * <p>
 	В данном блоке нужно создать потоки приёма и отправки 
@@ -29,7 +31,10 @@ import tuzhms.client.ReadNameThread;
 * @version 1.1.0
 */
 public class IntermediateBlock {
-	private Socket socket;
+
+	static Logger log = LoggerFactory.getLogger(IntermediateBlock.class);
+
+	//private Socket socket;
 	private BufferedReader in;
 	private PrintWriter out;
 	//private MainFrame chatFrame;
@@ -42,35 +47,23 @@ public class IntermediateBlock {
 				server.getSocket().getInputStream()));
 			out = new PrintWriter(
 				socket.getOutputStream(), true);
-			//System.out.println("---> in out good");
+			log.trace("In out good");
 
 			Thread readName = new Thread(new ReadNameThread(in, yourFriend));
 			readName.start();
-			//System.out.println("---> run good");
+			log.trace("ReadName thread good");
 			try {
 				Thread.sleep(100);
-				//System.out.println("---> sleep good");
+				log.trace("Sleep good");
 			} catch(InterruptedException e) {
-				System.out.println("---> Error sleep");
+				log.error("Error sleep", e);
 			}
-			//System.out.println("---> ready write");
+			log.trace("Ready write");
 			out.println(you.getName());	
 
-			/*//Потоки на чтение и запись, объявлены как демоны
-			Thread readThread = new Thread(new ReadMessageThread(chatFrame, in));
-			Thread writeThered = new Thread(
-				new WriteMessageThread(chatFrame, out));
-			readThread.setDaemon(true);
-			writeThered.setDaemon(true);
-
-			//Запуск потоков
-			readThread.start();
-			writeThered.start();*/
-
+			new DialogBlock(you, yourFriend, in, out);
 		} catch (IOException e) {
-			System.out.println("---> В сокете проблема!");
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+			log.error("In out error");
 		}
 	}
 }

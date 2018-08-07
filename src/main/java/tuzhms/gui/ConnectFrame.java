@@ -21,6 +21,9 @@ import tuzhms.client.Client;
 import tuzhms.client.CalledClient;
 //import tuzhms.client.Sender;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
 * Этот класс описывает окно подключения чата.
 * В нем указан ваш ip-адрес, а так же поля для ввода имени
@@ -32,6 +35,8 @@ import tuzhms.client.CalledClient;
 * @see JFrame
 */
 public class ConnectFrame extends JFrame implements Runnable {
+
+	static Logger log = LoggerFactory.getLogger(ConnectFrame.class);
 
 	private Client you;
 	private CalledClient yourFriend;
@@ -63,7 +68,9 @@ public class ConnectFrame extends JFrame implements Runnable {
 	}
 
 	public void run() {
-		
+
+		log.info("Start ConnectFrame");
+
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		//Элементы окна
@@ -152,7 +159,6 @@ public class ConnectFrame extends JFrame implements Runnable {
 		public void actionPerformed(ActionEvent e) {
 			if (!correctName()) return;
 			if (!correctConnectIp()) return;
-			//new Sender(you);
 			wakeThread();
 			ConnectFrame.this.dispose();
 		}
@@ -168,10 +174,12 @@ public class ConnectFrame extends JFrame implements Runnable {
 		*/
 		private boolean correctName() {
 			if (name.getText().equals("")) {
+				log.info("Uncorrect name");
 				new ErrorDialog(ConnectFrame.this, "Введите имя");
 				return false;
 			} else {
 				you.setName(name.getText());
+				log.info("Name set");
 				return true;
 			}
 		}
@@ -198,12 +206,15 @@ public class ConnectFrame extends JFrame implements Runnable {
 				} 
 				if (j != 4) throw new Exception();
 			} catch (Exception e) {
+				log.info("Uncorrect ip");
 				new ErrorDialog(ConnectFrame.this, "Введите корректный ip");
 				return false;
 			}
 			try {
 				yourFriend.setGlobalIp(connectIp.getText());
-			} catch(UnknownHostException e) {}
+			} catch(UnknownHostException e) {
+				log.error("Set ip error", e);
+			}
 			return true;
 		}
 
@@ -212,7 +223,9 @@ public class ConnectFrame extends JFrame implements Runnable {
 	public synchronized void waitThread() {
 		try {
 			wait();
-		} catch (InterruptedException e) {}
+		} catch (InterruptedException e) {
+			log.error("Wait error", e);
+		}
 	}
 
 	public synchronized void wakeThread() {

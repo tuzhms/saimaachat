@@ -11,15 +11,20 @@ import java.awt.Frame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
 * Модальное диалоговое окно с текстом ошибки
 *
 * @author Tuzhilkin Michael
-* @version 1.0.0
+* @version 1.1.0
 * @since 1.0.0
 * @see JFrame
 */
 public class ErrorDialog extends JFrame{
+
+	static Logger log = LoggerFactory.getLogger(ErrorDialog.class);
 	
 	/**
 	* Создание окна ошибки при некорректном событии
@@ -30,6 +35,7 @@ public class ErrorDialog extends JFrame{
 	* @see JDialog
 	*/
 	public ErrorDialog(Frame frame, String text) {
+		log.info(text);
 		final JDialog dialog = new JDialog(frame, "Ошибка", true);
 		dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 

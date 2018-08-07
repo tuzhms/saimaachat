@@ -1,5 +1,8 @@
 package tuzhms.gui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -13,6 +16,7 @@ import java.awt.event.KeyEvent;
 import tuzhms.constants.Title;
 
 import tuzhms.client.Client;
+import tuzhms.client.CalledClient;
 
 /**
 * Основное окно текстового чата
@@ -20,12 +24,14 @@ import tuzhms.client.Client;
 * чтоб можно было развивать интерфейс окна.
 *
 * @author Tuzhilkin Michael
-* @version 1.0.0
 * @since 1.0.0
+* @version 1.1.0
 * @see JFrame
 * @see Title
 */
 public class MainFrame extends JFrame implements Title{
+
+	static Logger log = LoggerFactory.getLogger(MainFrame.class);
 	
 	/** Поле для ввода сообщений */
 	private JTextField writeMessageField;
@@ -43,8 +49,8 @@ public class MainFrame extends JFrame implements Title{
 	* @see Client
 	* @since 1.0.0
 	*/
-	public MainFrame(Client you) {
-		super(Title.CHAT_NAME);
+	public MainFrame(Client you, CalledClient yourFriend) {
+		super(Title.CHAT_NAME + ": " + yourFriend.getName());
 		this.you = you;
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
@@ -70,7 +76,7 @@ public class MainFrame extends JFrame implements Title{
 
 		setSize(320, 390);
 		setVisible(true);
-
+		log.debug("MainFrame visible");
 	}
 
 	/**
@@ -100,7 +106,8 @@ public class MainFrame extends JFrame implements Title{
 	* @since 1.0.0
 	*/
 	public synchronized void addMessage(String message) {
-		readMessageField.append(message);
+		log.debug(message);
+		readMessageField.append(message + "\n");
 	}
 
 	/**
@@ -116,6 +123,7 @@ public class MainFrame extends JFrame implements Title{
 	*
 	* @return Сообщение из строки отправки сообщений
 	* @since 1.0.0
+	* @version 1.1.0
 	* @see MainFrame#wakeThread()
 	* @see tuzhms.client.WriteMessageThread
 	*/
@@ -123,10 +131,9 @@ public class MainFrame extends JFrame implements Title{
 		try {
 			wait();
 		} catch (InterruptedException e) {
-			System.out.println("---> Error wait");
+			log.error("Error wait", e);
 		}
-		String yourMessage = you.getName() + "@  "
-			+ writeMessageField.getText();
+		String yourMessage = writeMessageField.getText();
 		writeMessageField.setText("");
 		return yourMessage;
 	}

@@ -3,14 +3,20 @@ package tuzhms.client;
 import java.io.IOException;
 import java.io.BufferedReader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
-*
+* Поток для приёма имени подключённого пользователяы
 *
 * @author Tuzhilkin Michael
 * @since 1.1.0
 * @version 1.1.0
 */
 public class ReadNameThread implements Runnable {
+
+	static Logger log = LoggerFactory.getLogger(ReadNameThread.class);
+
 	private BufferedReader in;
 	private CalledClient yourFriend;
 
@@ -21,14 +27,12 @@ public class ReadNameThread implements Runnable {
 
 	public void run() {
 		try {
-			System.out.println("---> ReadNameThread good");
-			//Thread.sleep(10000);
-			//Thread.dumpStack();
+			log.trace("ReadNameThread ready read");
 			String name = in.readLine();
 			yourFriend.setName(name);
-			System.out.println("---> ReadNameThread very good");
+			log.trace("ReadNameThread read good: " + name);
 		} catch(IOException e) {
-			System.out.println("---> Ошибка приёма имени");
+			log.error("Raed name error");
 		}
 	}
 }

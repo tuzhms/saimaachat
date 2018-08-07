@@ -40,19 +40,13 @@ import tuzhms.gui.MainFrame;
 * @see Ports
 * @see Client
 */
-public class Sender implements Ports {
+/*public class Sender implements Ports {
 
 	private Client you;
-	private Socket socket;
-	private BufferedReader in;
-	private PrintWriter out;
-	private MainFrame chatFrame;
+	
 
 	//Пока не используется
 	private boolean stoped = false;
-
-	/** Тригер успешного подключения ко второму пользователю*/
-	private boolean socketGood = false;
 
 	/**
 	* Конструктор отправителя.
@@ -61,64 +55,19 @@ public class Sender implements Ports {
 	* @see Client
 	* @see ReadMessageThread
 	* @see WriteMessageThread
-	* @see SubServerThread
 	* @since 1.0.0
+	* @version 1.1.0
 	*/
-	public Sender(Client you) {
+	/*public Sender(Client you) {
 		this.you = you;
 		chatFrame = new MainFrame(you);
 
-		//Создание и запуск серверного потока, ожидающего подключение
-		SubServerThread subServerThread = new SubServerThread();
-		Thread server = new Thread(subServerThread);
-		server.start();
+		//Тут кучу говна сделал
 
-		//Долбёжка к подключаемому пользователю
-		while (!socketGood) {
-			try {
-				socket = new Socket(
-					InetAddress.getByName(you.getConnectIp()), Ports.PORT);
-				System.out.println("---> Socket - good!");
-				socketGood = true;
-			} catch(IOException e) {
-				System.out.println("---> Socket - error!");
-			} finally {
-				try {
-					/* Задержка нужна, чтоб опаздывающий успел подключиться
-					до инициализации потоков ввода и вывода пользователя,
-					который подключился первым. Иначе возникает ошибка */
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					System.out.println("---> Socket - nedozhdalsya!");
-				}
-			} 
-			
-		}
 		
-		try {
-			//Потоки ввода и вывода
-			in = new BufferedReader(new InputStreamReader(
-				subServerThread.getSocket().getInputStream()));
-			out = new PrintWriter(
-				socket.getOutputStream(), true);
-
-			//Потоки на чтение и запись, объявлены как демоны
-			Thread readThread = new Thread(new ReadMessageThread(chatFrame, in));
-			Thread writeThered = new Thread(
-				new WriteMessageThread(chatFrame, out));
-			readThread.setDaemon(true);
-			writeThered.setDaemon(true);
-
-			//Запуск потоков
-			readThread.start();
-			writeThered.start();
-
-		} catch (IOException e) {
-			System.out.println("---> В сокете проблема!");
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
+		
+		
 
 	}
 	
-}
+}*/
